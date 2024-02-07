@@ -1,0 +1,27 @@
+*
+{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  font-family: 'Roboto', sans-serif;
+  overflow-x: hidden;
+  background-color: brown;
+}
+
+.container
+{
+  width: 80%;
+  max-width: 1176px;
+  margin: auto;
+}
+
+.row
+{
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -1rem;
+}
+
