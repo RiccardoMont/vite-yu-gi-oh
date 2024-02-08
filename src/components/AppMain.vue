@@ -1,6 +1,5 @@
 <script>
 import axios from 'axios';
-import AppSelectOptions from './AppSelectOptions.vue';
 import AppCardCatalogue from './AppCardCatalogue.vue';
 
 
@@ -9,11 +8,11 @@ export default {
     data() {
         return {
             list: [],
-            archetypes: []
+            archetypes: [],
+            selectedArchetype: null
         }
     },
     components: {
-        AppSelectOptions,
         AppCardCatalogue
     },
     mounted() {
@@ -23,21 +22,39 @@ export default {
                 console.log(response.data);
                 this.list = response.data.data;
                 console.log(this.list[0].archetype);
+                
                 for (let i = 0; i < this.list.length; i++) {
+                    this.list[i].show = true;
+                    console.log(this.list[i].show);
                     if (this.list[i].archetype) {
                         this.archetypes.push(this.list[i].archetype);
                     }
                 }
             })
+    },
+    methods: {
+        archetypesFilter(){
+            console.log(this.selectedArchetype);
+            const filtro = this.list.filter(singlecard => {
+                if(this.selectedArchetype === 'All'){
+                    singlecard.show = true;
+                } else if (this.selectedArchetype !== singlecard.archetype){
+                    singlecard.show = false;
+                } else {
+                    singlecard.show = true;
+                }
+            })
+        }
+
     }
 }
 </script>
 <template>
     <div class="containerSelect">
         <label for="DeckArchetype">Deck Archetype</label>
-        <select name="deckArcs" id="DeckArchetype">
-            <AppSelectOptions v-if="list != undefined" v-for="(singleArchetype, index) in new Set(archetypes)"
-                :singleArchetype="singleArchetype"></AppSelectOptions>
+        <select @change="archetypesFilter()" v-model="selectedArchetype" name="deckArcs" id="DeckArchetype">
+            <option value="All" selected>All</option>
+            <option v-if="list != undefined" v-for="(singleArchetype, index) in new Set(archetypes)" :value="singleArchetype">{{ singleArchetype }}</option>
         </select>
     </div>
     <div class="container">
@@ -63,6 +80,6 @@ export default {
 
 .row {
     width: 90%;
-    justify-content: center;
+    justify-content: space-between;
 }
 </style>

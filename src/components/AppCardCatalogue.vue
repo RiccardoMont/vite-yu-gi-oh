@@ -7,7 +7,7 @@ export default {
 }
 </script>
 <template>
-    <div class="card col-20">
+    <div v-show="singlecard.show" class="card col-20">
         <img :src="singlecard.card_images[0].image_url_small">
         <span class="title">{{ singlecard.name }}</span>
         <br>
