@@ -1,36 +1,60 @@
 <script>
 import axios from 'axios';
+import AppSelectOptions from './AppSelectOptions.vue';
+import AppCardCatalogue from './AppCardCatalogue.vue';
+
 
 export default {
     name: 'AppMain',
     data() {
         return {
-            list: []
+            list: [],
+            archetypes: []
         }
+    },
+    components: {
+        AppSelectOptions,
+        AppCardCatalogue
     },
     mounted() {
         axios
-            .get('https://db.ygoprodeck.com/api/v7/cardinfo.php?num=20&offset=0')
+            .get('https://db.ygoprodeck.com/api/v7/cardinfo.php?num=50&offset=0')
             .then((response) => {
                 console.log(response.data);
                 this.list = response.data.data;
+                console.log(this.list[0].archetype);
+                for (let i = 0; i < this.list.length; i++) {
+                    if (this.list[i].archetype) {
+                        this.archetypes.push(this.list[i].archetype);
+                    }
+                }
             })
     }
 }
 </script>
 <template>
+    <div class="containerSelect">
+        <label for="DeckArchetype">Deck Archetype</label>
+        <select name="deckArcs" id="DeckArchetype">
+            <AppSelectOptions v-if="list != undefined" v-for="(singleArchetype, index) in new Set(archetypes)"
+                :singleArchetype="singleArchetype"></AppSelectOptions>
+        </select>
+    </div>
     <div class="container">
-        <div class="row" v-if="list != undefined">
-            <div class="card col-20" v-for="(singlecard, index) in list">
-                <img :src="singlecard.card_images[0].image_url_small">
-                <span class="title">{{ singlecard.name }}</span>
-                <br>
-                <span class="archetype">{{ singlecard.archetype }}</span>
-            </div>
+        <div class="row">
+            <AppCardCatalogue v-if="list != undefined" v-for="(singlecard, index) in list" :singlecard="singlecard">
+            </AppCardCatalogue>
         </div>
     </div>
 </template>
 <style scoped>
+.containerSelect {
+    width: 80%;
+    max-width: 1176px;
+    margin: auto;
+    padding: 2rem 0;
+}
+
 .container {
     background-color: white;
     display: flex;
@@ -40,41 +64,5 @@ export default {
 .row {
     width: 90%;
     justify-content: center;
-}
-
-.col-20 {
-    width: 20%;
-    margin: 1rem;
-}
-
-.card {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background-color: chocolate;
-    border-bottom-left-radius: 1rem;
-    text-align: center;
-    transition: border-bottom-right-radius 0.5s,  border-bottom-left-radius 0.5s, box-shadow 0.6s, filter 0.6s ;
-
-    & img {
-        width: 100%;
-        margin-bottom: 0.5rem;
-    }
-
-    & span {}
-
-    .title {
-        font-weight: 700;
-        color: white;
-    }
-}
-
-.card:hover {
-    
-    box-shadow: 10px 5px 5px #a72222;
-    filter: drop-shadow(15px 8px 3px #8f1d1d);
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 1rem;
-    
 }
 </style>
