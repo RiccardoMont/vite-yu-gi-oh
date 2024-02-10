@@ -9,29 +9,31 @@ export default {
 <template>
     <div v-show="singlecard.show" class="card col-20">
         <img :src="singlecard.card_images[0].image_url_small">
+
         <span class="title">{{ singlecard.name }}</span>
-        <br>
         <span class="archetype">{{ singlecard.archetype }}</span>
     </div>
 </template>
 <style scoped>
 .col-20 {
-    width: 20%;
+    width: calc((100%/10)*2  - 2rem);
     margin: 1rem;
 }
+
 .card {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    gap: 8px;
     background-color: chocolate;
     border-bottom-left-radius: 1rem;
     text-align: center;
     transition: border-bottom-right-radius 0.5s, border-bottom-left-radius 0.5s, box-shadow 0.6s, filter 0.6s;
     cursor: pointer;
+    
 
     & img {
         width: 100%;
-        margin-bottom: 0.5rem;
     }
 
     & span {}

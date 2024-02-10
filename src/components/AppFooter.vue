@@ -13,6 +13,7 @@ export default {
 </template>
 <style scoped>
 .row{
+    
     background-color: black;
     padding: 0 2rem;
     align-items: center;
